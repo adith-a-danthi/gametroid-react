@@ -1,0 +1,28 @@
+:root {
+  --color-dark-tint: rgba(0, 0, 0, 0.5);
+}
+
+.hero {
+  width: 100%;
+  max-width: 100%;
+  position: relative;
+}
+
+.hero-bg {
+  background: url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.hero-content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  background-color: var(--color-dark-tint);
+}

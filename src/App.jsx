@@ -1,9 +1,12 @@
+import { Route, Routes } from 'react-router';
+import { Home } from './views/Home/Home';
+
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <h1>gametroid</h1>
-      </header>
+      <Routes>
+        <Route path="/" element={<Home />} />
+      </Routes>
     </div>
   );
 }
