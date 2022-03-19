@@ -18,7 +18,7 @@ export default function CategoriesSection() {
       {categories.map(({ _id, categoryImage, categoryName }) => (
         <div className="card" key={_id}>
           <a href="#">
-            <img src={categoryImage} alt="" className="card-img fill-height" />
+            <img src={categoryImage} alt={categoryName} className="card-img fill-height" />
             <div className="card-overlay">
               <h3 className="heading-3">{categoryName} &gt;</h3>
             </div>
