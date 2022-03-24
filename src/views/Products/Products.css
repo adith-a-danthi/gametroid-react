@@ -1,0 +1,34 @@
+.shop-layout {
+  display: grid;
+  grid-template-areas: 'sidebar main-content';
+  grid-template-columns: 18rem 1fr;
+}
+
+.sidebar {
+  grid-area: sidebar;
+  padding: 1rem;
+}
+
+.products-grid {
+  grid-area: main-content;
+  padding: 1rem;
+  background-color: var(--color-secondary);
+
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 18.75rem);
+  place-content: center;
+  gap: 1.5rem;
+}
+
+.sidebar-list {
+  list-style: none;
+  padding: 0;
+  margin: 0.5rem;
+}
+
+@media only screen and (max-width: 600px) {
+  .shop-layout {
+    grid-template-areas: 'sidebar' 'main-content';
+    grid-template-columns: 1fr;
+  }
+}
