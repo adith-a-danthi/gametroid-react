@@ -13,7 +13,7 @@ export function Home() {
             <h1 className="heading-1 text-white">Explore</h1>
             <p className="text-lg text-white">Explore latest deals and new releases</p>
             <div className="flex gap-1 py-4">
-              <Link to="/">
+              <Link to="/products">
                 <button className="btn btn-secondary font-weight-bold">Shop Now</button>
               </Link>
             </div>

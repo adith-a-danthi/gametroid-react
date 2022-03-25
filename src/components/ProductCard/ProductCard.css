@@ -1,0 +1,38 @@
+.ecomm {
+  display: flex;
+  flex-direction: column;
+}
+
+.ecomm.ecomm-landscape {
+  width: 100%;
+  max-width: 100%;
+  flex-direction: row;
+}
+
+.ecomm .card-img {
+  height: 25rem;
+  max-height: 25rem;
+}
+
+.ecomm-landscape .card-img {
+  max-width: 10rem;
+  max-height: 15rem;
+}
+
+.ecomm .card-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 0.5rem;
+  gap: 1rem;
+}
+
+@media only screen and (max-width: 600px) {
+  .ecomm.ecomm-landscape {
+    flex-direction: column;
+  }
+
+  .ecomm-landscape .card-img {
+    margin: 0 auto;
+  }
+}
