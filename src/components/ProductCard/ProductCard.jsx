@@ -1,9 +1,14 @@
+import { useCart } from '../../contexts/cart-context';
+import { useWishlist } from '../../contexts/wishlist-context';
 import './ProductCard.css';
 
 export default function ProductCard({ product }) {
   const { title, price, imageURL, discount, rating } = product;
-
   const finalPrice = discount ? price - (price * discount) / 100 : price;
+
+  const { dispatchCart } = useCart();
+  const { wishlist, dispatchWishlist } = useWishlist();
+  const isWishlisted = wishlist.some((item) => item._id === product._id);
 
   return (
     <div className="card outlined-card ecomm">
@@ -28,12 +33,21 @@ export default function ProductCard({ product }) {
         </div>
         {/* Action Buttons */}
         <div className="card-actions">
-          <button className="btn flex-1">
-            <span className="fas fa-shopping-cart"></span>
+          <button
+            className="btn flex-1"
+            onClick={() => dispatchCart({ type: 'ADD_TO_CART', payload: product })}>
+            <span className="fas fa-shopping-cart mr-2"></span>
             Add to Cart
           </button>
-          <button className="btn outlined">
-            <span className="far fa-heart"></span>
+          <button
+            className="btn outlined"
+            onClick={() =>
+              dispatchWishlist({
+                type: isWishlisted ? 'REMOVE_FROM_WISHLIST' : 'ADD_TO_WISHLIST',
+                payload: product,
+              })
+            }>
+            <span className={isWishlisted ? 'fas fa-heart' : 'far fa-heart'}></span>
           </button>
         </div>
       </div>
