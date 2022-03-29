@@ -1,0 +1,12 @@
+.wishlist-layout {
+  max-width: 65rem;
+  margin: 1rem auto;
+}
+
+.wishlist-items {
+  padding: 1rem 0;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-around;
+  gap: 2rem;
+}

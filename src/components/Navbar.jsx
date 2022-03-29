@@ -1,6 +1,10 @@
 import { Link } from 'react-router-dom';
+import { useCart } from '../contexts/cart-context';
+import { useWishlist } from '../contexts/wishlist-context';
 
 export default function Navbar() {
+  const { cartSummary } = useCart();
+  const { wishlist } = useWishlist();
   return (
     <header>
       <nav className="navbar">
@@ -17,23 +21,23 @@ export default function Navbar() {
             </Link>
           </li>
           <li>
-            <Link to="/">
+            <Link to="/wishlist">
               <button className="btn link">
                 Wishlist
                 <span className="badge ml-1">
                   <span className="far fa-heart fa-lg"></span>
-                  <span className="badge-content icon-number">8</span>
+                  <span className="badge-content icon-number primary">{wishlist.length}</span>
                 </span>
               </button>
             </Link>
           </li>
           <li>
-            <Link to="/">
+            <Link to="/cart">
               <button className="btn link">
                 Cart
                 <span className="badge">
                   <span className="fas fa-shopping-cart"></span>
-                  <span className="badge-content icon-number">8</span>
+                  <span className="badge-content icon-number primary">{cartSummary.quantity}</span>
                 </span>
               </button>
             </Link>
