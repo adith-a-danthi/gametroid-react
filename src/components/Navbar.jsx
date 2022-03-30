@@ -16,7 +16,7 @@ export default function Navbar() {
         </h3>
         <ul className="nav-link-section">
           <li>
-            <Link to="/">
+            <Link to="/login">
               <button className="btn link">Login</button>
             </Link>
           </li>
