@@ -1,11 +1,14 @@
+import axios from 'axios';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/auth-context';
 
 export default function Register() {
   // Hooks
   const [form, setFormData] = useState({ name: '', email: '', password: '' });
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const { name, email, password } = form;
   // Handlers
@@ -16,7 +19,21 @@ export default function Register() {
 
   const signUpHandler = async (e) => {
     e.preventDefault();
-    navigate('/products', { replace: true });
+
+    try {
+      const response = await axios.post('/api/auth/signup', {
+        name,
+        email,
+        password,
+      });
+
+      const { encodedToken, foundUser } = response.data;
+      login({ token: encodedToken, user: foundUser });
+
+      navigate('/products', { replace: true });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
