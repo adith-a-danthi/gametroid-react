@@ -3,12 +3,15 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 import { useAuth } from '../contexts/auth-context';
+import { useCart } from '../contexts/cart-context';
+import { getCartAPI } from '../utils/cart-utils';
 
 export default function Login() {
   // Hooks
   const [form, setFormData] = useState({ email: '', password: '' });
   const [showPassword, setShowPassword] = useState(false);
   const { login } = useAuth();
+  const { dispatchCart } = useCart();
   const navigate = useNavigate();
 
   const { email, password } = form;
@@ -29,6 +32,8 @@ export default function Login() {
 
       const { encodedToken, foundUser } = response.data;
       login({ token: encodedToken, user: foundUser });
+
+      getCartAPI(dispatchCart);
 
       navigate('/products', { replace: true });
     } catch (error) {
