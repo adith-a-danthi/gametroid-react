@@ -6,6 +6,7 @@ import { useWishlist } from '../contexts/wishlist-context';
 import { useAuth } from '../contexts/auth-context';
 
 import { getCartAPI } from '../utils/cart-utils';
+import { getWishlistAPI } from '../utils/wishlist-utils';
 
 export default function Navbar() {
   const {
@@ -13,10 +14,13 @@ export default function Navbar() {
     logout,
   } = useAuth();
   const { cartSummary, dispatchCart } = useCart();
-  const { wishlist } = useWishlist();
+  const { wishlist, dispatchWishlist } = useWishlist();
 
   useEffect(() => {
-    isAuthenticated && getCartAPI(dispatchCart);
+    if (isAuthenticated) {
+      getCartAPI(dispatchCart);
+      getWishlistAPI(dispatchWishlist);
+    }
   }, []);
 
   return (

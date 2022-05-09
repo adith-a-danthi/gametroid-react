@@ -3,6 +3,7 @@ import { useCart } from '../../contexts/cart-context';
 import { useWishlist } from '../../contexts/wishlist-context';
 import { useAuth } from '../../contexts/auth-context';
 import { addToCartAPI } from '../../utils/cart-utils';
+import { addToWishlistAPI, removeFromWishlistAPI } from '../../utils/wishlist-utils';
 import './ProductCard.css';
 
 export default function ProductCard({ product }) {
@@ -60,10 +61,9 @@ export default function ProductCard({ product }) {
           <button
             className="btn outlined"
             onClick={() =>
-              dispatchWishlist({
-                type: isWishlisted ? 'REMOVE_FROM_WISHLIST' : 'ADD_TO_WISHLIST',
-                payload: product,
-              })
+              isWishlisted
+                ? removeFromWishlistAPI(dispatchWishlist, product)
+                : addToWishlistAPI(dispatchWishlist, product)
             }>
             <span className={isWishlisted ? 'fas fa-heart' : 'far fa-heart'}></span>
           </button>
