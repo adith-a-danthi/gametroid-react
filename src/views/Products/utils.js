@@ -13,7 +13,7 @@ const getSortedProducts = (products, filterState) => {
 const applyCategoryFilter = (products, filterState) => {
   const { categories } = filterState;
   if (categories.length === 0) return products;
-  return products.filter((product) => categories.includes(product.categoryName.toLowerCase()));
+  return products.filter((product) => categories.includes(product.categoryName));
 };
 
 const applyRatingFilter = (products, filterState) => {
