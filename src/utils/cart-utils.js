@@ -47,4 +47,15 @@ const updateQuantityAPI = async (dispatchCart, product, type) => {
   }
 };
 
-export { getCartAPI, addToCartAPI, removeFromCartAPI, updateQuantityAPI };
+const clearCartAPI = async (dispatchCart) => {
+  try {
+    const response = await axios.delete('/api/user/cart', {
+      headers: { authorization: localStorage.getItem('token') },
+    });
+    dispatchCart({ type: 'UPDATE_CART_FROM_API', payload: response.data.cart });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export { getCartAPI, addToCartAPI, removeFromCartAPI, updateQuantityAPI, clearCartAPI };
