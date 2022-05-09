@@ -1,12 +1,10 @@
 import axios from 'axios';
 
 const getCartAPI = async (dispatchCart) => {
-  console.log('getCartAPI');
   try {
     const response = await axios.get('/api/user/cart', {
       headers: { authorization: localStorage.getItem('token') },
     });
-    console.log('Response: ', response.data);
     dispatchCart({ type: 'UPDATE_CART_FROM_API', payload: response.data.cart });
   } catch (error) {
     console.log(error);
@@ -38,7 +36,6 @@ const removeFromCartAPI = async (dispatchCart, product) => {
 };
 
 const updateQuantityAPI = async (dispatchCart, product, type) => {
-  console.log('updateQuantityAPI');
   try {
     const params = { action: { type } };
     const response = await axios.post(`/api/user/cart/${product._id}`, params, {
