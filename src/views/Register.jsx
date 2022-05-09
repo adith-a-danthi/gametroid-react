@@ -27,8 +27,8 @@ export default function Register() {
         password,
       });
 
-      const { encodedToken, foundUser } = response.data;
-      login({ token: encodedToken, user: foundUser });
+      const { encodedToken, createdUser } = response.data;
+      login({ token: encodedToken, user: createdUser });
 
       navigate('/products', { replace: true });
     } catch (error) {
