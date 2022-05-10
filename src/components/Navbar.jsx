@@ -1,13 +1,23 @@
+import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+
 import { useCart } from '../contexts/cart-context';
 import { useWishlist } from '../contexts/wishlist-context';
 import { useAuth } from '../contexts/auth-context';
 
+import { getCartAPI } from '../utils/cart-utils';
+
 export default function Navbar() {
-  const { authState, logout } = useAuth();
-  const { isAuthenticated } = authState;
-  const { cartSummary } = useCart();
+  const {
+    authState: { isAuthenticated },
+    logout,
+  } = useAuth();
+  const { cartSummary, dispatchCart } = useCart();
   const { wishlist } = useWishlist();
+
+  useEffect(() => {
+    isAuthenticated && getCartAPI(dispatchCart);
+  }, []);
 
   return (
     <header>
@@ -39,9 +49,7 @@ export default function Navbar() {
                     Cart
                     <span className="badge">
                       <span className="fas fa-shopping-cart"></span>
-                      <span className="badge-content icon-number primary">
-                        {cartSummary.quantity}
-                      </span>
+                      <span className="badge-content icon-number primary">{cartSummary.qty}</span>
                     </span>
                   </button>
                 </Link>

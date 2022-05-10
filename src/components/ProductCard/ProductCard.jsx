@@ -1,14 +1,34 @@
+import { useNavigate } from 'react-router';
 import { useCart } from '../../contexts/cart-context';
 import { useWishlist } from '../../contexts/wishlist-context';
+import { useAuth } from '../../contexts/auth-context';
+import { addToCartAPI } from '../../utils/cart-utils';
 import './ProductCard.css';
 
 export default function ProductCard({ product }) {
   const { title, price, imageURL, discount, rating } = product;
   const finalPrice = discount ? price - (price * discount) / 100 : price;
 
-  const { dispatchCart } = useCart();
+  // Hooks
+  const { cart, dispatchCart } = useCart();
   const { wishlist, dispatchWishlist } = useWishlist();
+  const { authState } = useAuth();
+  const navigate = useNavigate();
+
   const isWishlisted = wishlist.some((item) => item._id === product._id);
+
+  const addToCart = async () => {
+    if (authState.isAuthenticated) {
+      const itemInCart = cart.find((item) => item._id === product._id);
+      if (itemInCart) {
+        navigate('/cart');
+      } else {
+        addToCartAPI(dispatchCart, product);
+      }
+    } else {
+      navigate('/login');
+    }
+  };
 
   return (
     <div className="card outlined-card ecomm">
@@ -33,9 +53,7 @@ export default function ProductCard({ product }) {
         </div>
         {/* Action Buttons */}
         <div className="card-actions">
-          <button
-            className="btn flex-1"
-            onClick={() => dispatchCart({ type: 'ADD_TO_CART', payload: product })}>
+          <button className="btn flex-1" onClick={() => addToCart()}>
             <span className="fas fa-shopping-cart mr-2"></span>
             Add to Cart
           </button>
