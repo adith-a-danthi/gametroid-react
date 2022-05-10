@@ -31,6 +31,16 @@ export default function ProductCard({ product }) {
     }
   };
 
+  const addToWishlist = () => {
+    if (authState.isAuthenticated) {
+      isWishlisted
+        ? removeFromWishlistAPI(dispatchWishlist, product)
+        : addToWishlistAPI(dispatchWishlist, product);
+    } else {
+      navigate('/login');
+    }
+  };
+
   return (
     <div className="card outlined-card ecomm">
       {/* Image */}
@@ -58,13 +68,7 @@ export default function ProductCard({ product }) {
             <span className="fas fa-shopping-cart mr-2"></span>
             Add to Cart
           </button>
-          <button
-            className="btn outlined"
-            onClick={() =>
-              isWishlisted
-                ? removeFromWishlistAPI(dispatchWishlist, product)
-                : addToWishlistAPI(dispatchWishlist, product)
-            }>
+          <button className="btn outlined" onClick={() => addToWishlist()}>
             <span className={isWishlisted ? 'fas fa-heart' : 'far fa-heart'}></span>
           </button>
         </div>
