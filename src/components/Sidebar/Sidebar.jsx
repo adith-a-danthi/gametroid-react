@@ -2,7 +2,7 @@ import { useProducts } from '../../contexts/product-context';
 import './Sidebar.css';
 
 export default function Sidebar() {
-  const { filtersState, filtersDispatch } = useProducts();
+  const { categories: categoriesState, filtersState, filtersDispatch } = useProducts();
   const { categories, sortBy, rating, priceRange } = filtersState;
 
   const categoryClickHandler = (category) => {
@@ -49,45 +49,21 @@ export default function Sidebar() {
       <div className="my-4">
         <h5 className="heading-5">Category</h5>
         <ul className="sidebar-list">
-          <li>
-            <input
-              className="input"
-              type="checkbox"
-              id="games"
-              name="games"
-              checked={categories.includes('games')}
-              onChange={() => categoryClickHandler('games')}
-            />
-            <label className="text-base ml-2" htmlFor="games">
-              Games
-            </label>
-          </li>
-          <li>
-            <input
-              className="input"
-              type="checkbox"
-              id="consoles"
-              name="consoles"
-              checked={categories.includes('consoles')}
-              onChange={() => categoryClickHandler('consoles')}
-            />
-            <label className="text-base ml-2" htmlFor="consoles">
-              Consoles
-            </label>
-          </li>
-          <li>
-            <input
-              className="input"
-              type="checkbox"
-              id="accessories"
-              name="accessories"
-              checked={categories.includes('accessories')}
-              onChange={() => categoryClickHandler('accessories')}
-            />
-            <label className="text-base ml-2" htmlFor="accessories">
-              Accessories
-            </label>
-          </li>
+          {categoriesState.map(({ categoryName }, index) => (
+            <li key={index}>
+              <input
+                className="input"
+                type="checkbox"
+                id={categoryName}
+                name={categoryName}
+                checked={categories.includes(categoryName)}
+                onChange={() => categoryClickHandler(categoryName)}
+              />
+              <label className="text-base ml-2" htmlFor={categoryName}>
+                {categoryName}
+              </label>
+            </li>
+          ))}
         </ul>
       </div>
 

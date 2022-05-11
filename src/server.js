@@ -2,6 +2,7 @@ import { Server, Model, RestSerializer } from 'miragejs';
 import { loginHandler, signupHandler } from './backend/controllers/AuthController';
 import {
   addItemToCartHandler,
+  clearCartHandler,
   getCartItemsHandler,
   removeItemFromCartHandler,
   updateCartItemHandler,
@@ -66,6 +67,7 @@ export function makeServer({ environment = 'development' } = {}) {
       this.post('/user/cart', addItemToCartHandler.bind(this));
       this.post('/user/cart/:productId', updateCartItemHandler.bind(this));
       this.delete('/user/cart/:productId', removeItemFromCartHandler.bind(this));
+      this.delete('/user/cart', clearCartHandler.bind(this));
 
       // wishlist routes (private)
       this.get('/user/wishlist', getWishlistItemsHandler.bind(this));

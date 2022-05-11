@@ -3,6 +3,7 @@ import { useCart } from '../../contexts/cart-context';
 import { useWishlist } from '../../contexts/wishlist-context';
 import { useAuth } from '../../contexts/auth-context';
 import { addToCartAPI } from '../../utils/cart-utils';
+import { addToWishlistAPI, removeFromWishlistAPI } from '../../utils/wishlist-utils';
 import './ProductCard.css';
 
 export default function ProductCard({ product }) {
@@ -25,6 +26,16 @@ export default function ProductCard({ product }) {
       } else {
         addToCartAPI(dispatchCart, product);
       }
+    } else {
+      navigate('/login');
+    }
+  };
+
+  const addToWishlist = () => {
+    if (authState.isAuthenticated) {
+      isWishlisted
+        ? removeFromWishlistAPI(dispatchWishlist, product)
+        : addToWishlistAPI(dispatchWishlist, product);
     } else {
       navigate('/login');
     }
@@ -57,14 +68,7 @@ export default function ProductCard({ product }) {
             <span className="fas fa-shopping-cart mr-2"></span>
             Add to Cart
           </button>
-          <button
-            className="btn outlined"
-            onClick={() =>
-              dispatchWishlist({
-                type: isWishlisted ? 'REMOVE_FROM_WISHLIST' : 'ADD_TO_WISHLIST',
-                payload: product,
-              })
-            }>
+          <button className="btn outlined" onClick={() => addToWishlist()}>
             <span className={isWishlisted ? 'fas fa-heart' : 'far fa-heart'}></span>
           </button>
         </div>

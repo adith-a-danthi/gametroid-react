@@ -1,6 +1,7 @@
 import { useCart } from '../../contexts/cart-context';
 import { useWishlist } from '../../contexts/wishlist-context';
 import { removeFromCartAPI, updateQuantityAPI } from '../../utils/cart-utils';
+import { addToWishlistAPI } from '../../utils/wishlist-utils';
 import './CartItem.css';
 
 export default function CartItem({ product }) {
@@ -12,7 +13,7 @@ export default function CartItem({ product }) {
 
   const moveToWishlist = () => {
     removeFromCartAPI(dispatchCart, product);
-    dispatchWishlist({ type: 'ADD_TO_WISHLIST', payload: product });
+    addToWishlistAPI(dispatchWishlist, product);
   };
 
   const decreseQuantity = () => {
