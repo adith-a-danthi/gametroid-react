@@ -3,7 +3,7 @@ import { createContext, useContext, useState, useReducer, useEffect } from 'reac
 
 const ProductContext = createContext();
 
-import { filterInitialState, filterReducer } from '../hooks/filterReducer';
+import { filterInitialState, filterReducer } from '../reducers/filterReducer';
 
 const ProductProvider = ({ children }) => {
   const [products, setProducts] = useState([]);
