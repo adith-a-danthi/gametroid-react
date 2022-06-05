@@ -1,6 +1,6 @@
 import { Navbar, Sidebar, ProductCard } from '../../components';
 import { useProducts } from '../../contexts/product-context';
-import { getFilteredProducts } from './utils';
+import { getFilteredProducts } from '../../utils/product-utils';
 import './Products.css';
 
 export function Products() {

@@ -1,17 +1,25 @@
 import { useCart } from '../../contexts/cart-context';
 import { useWishlist } from '../../contexts/wishlist-context';
+import { removeFromCartAPI, updateQuantityAPI } from '../../utils/cart-utils';
+import { addToWishlistAPI } from '../../utils/wishlist-utils';
 import './CartItem.css';
 
 export default function CartItem({ product }) {
   const { dispatchCart } = useCart();
   const { dispatchWishlist } = useWishlist();
 
-  const { title, price, imageURL, discount, quantity } = product;
+  const { title, price, imageURL, discount, qty } = product;
   const finalPrice = discount ? price - (price * discount) / 100 : price;
 
   const moveToWishlist = () => {
-    dispatchCart({ type: 'REMOVE_FROM_CART', payload: product });
-    dispatchWishlist({ type: 'ADD_TO_WISHLIST', payload: product });
+    removeFromCartAPI(dispatchCart, product);
+    addToWishlistAPI(dispatchWishlist, product);
+  };
+
+  const decreseQuantity = () => {
+    product.qty === 1
+      ? removeFromCartAPI(dispatchCart, product)
+      : updateQuantityAPI(dispatchCart, product, 'decrement');
   };
 
   return (
@@ -35,15 +43,13 @@ export default function CartItem({ product }) {
         {/* Quantity */}
         <div className="flex gap-2 align-items-center my-4">
           <strong className="text-base">Quantity: </strong>
-          <button
-            className="btn"
-            onClick={() => dispatchCart({ type: 'DECREASE_QUANTITY', payload: product })}>
+          <button className="btn" onClick={() => decreseQuantity()}>
             <span className="fas fa-minus"></span>
           </button>
-          <p className="quantity">{quantity}</p>
+          <p className="quantity">{qty}</p>
           <button
             className="btn"
-            onClick={() => dispatchCart({ type: 'INCREASE_QUANTITY', payload: product })}>
+            onClick={() => updateQuantityAPI(dispatchCart, product, 'increment')}>
             <span className="fas fa-plus"></span>
           </button>
         </div>
@@ -52,7 +58,7 @@ export default function CartItem({ product }) {
         <div className="grid grid-cols-2 fluid-grid">
           <button
             className="btn outlined my-2"
-            onClick={() => dispatchCart({ type: 'REMOVE_FROM_CART', payload: product })}>
+            onClick={() => removeFromCartAPI(dispatchCart, product)}>
             Remove from cart
           </button>
           <button className="btn outlined my-2" onClick={moveToWishlist}>

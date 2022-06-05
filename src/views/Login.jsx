@@ -1,10 +1,21 @@
+import axios from 'axios';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+
+import { useAuth } from '../contexts/auth-context';
+import { useCart } from '../contexts/cart-context';
+import { useWishlist } from '../contexts/wishlist-context';
+
+import { getCartAPI } from '../utils/cart-utils';
+import { getWishlistAPI } from '../utils/wishlist-utils';
 
 export default function Login() {
   // Hooks
   const [form, setFormData] = useState({ email: '', password: '' });
   const [showPassword, setShowPassword] = useState(false);
+  const { login } = useAuth();
+  const { dispatchCart } = useCart();
+  const { dispatchWishlist } = useWishlist();
   const navigate = useNavigate();
 
   const { email, password } = form;
@@ -17,7 +28,22 @@ export default function Login() {
 
   const loginHandler = async (e) => {
     e.preventDefault();
-    navigate('/products', { replace: true });
+    try {
+      const response = await axios.post('/api/auth/login', {
+        email,
+        password,
+      });
+
+      const { encodedToken, foundUser } = response.data;
+      login({ token: encodedToken, user: foundUser });
+
+      getCartAPI(dispatchCart);
+      getWishlistAPI(dispatchWishlist);
+
+      navigate('/products', { replace: true });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (

@@ -1,5 +1,5 @@
 import { createContext, useContext, useReducer } from 'react';
-import { wishlistInitialState, wishlistReducer } from '../hooks/wishlistReducer';
+import { wishlistInitialState, wishlistReducer } from '../reducers/wishlistReducer';
 const WishlistContext = createContext();
 
 const WishlistProvider = ({ children }) => {

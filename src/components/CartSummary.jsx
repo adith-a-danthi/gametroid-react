@@ -3,7 +3,7 @@ import { useCart } from '../contexts/cart-context';
 export default function CartSummary() {
   const { cartSummary } = useCart();
 
-  const { initialPrice, discount, quantity, total } = cartSummary;
+  const { initialPrice, discount, qty, total } = cartSummary;
 
   return (
     <div className="cart-summary">
@@ -12,7 +12,7 @@ export default function CartSummary() {
         <hr />
         {/* <!-- Price --> */}
         <div className="flex justify-space-between">
-          <p className="font-weight-bold">Price ( {quantity} items)</p>
+          <p className="font-weight-bold">Price ( {qty} items)</p>
           <p>₹ {initialPrice}</p>
         </div>
         {/* <!-- Discount --> */}

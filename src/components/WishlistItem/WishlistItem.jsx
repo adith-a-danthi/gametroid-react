@@ -1,5 +1,7 @@
 import { useCart } from '../../contexts/cart-context';
 import { useWishlist } from '../../contexts/wishlist-context';
+import { addToCartAPI } from '../../utils/cart-utils';
+import { removeFromWishlistAPI } from '../../utils/wishlist-utils';
 
 import './WishlistItem.css';
 
@@ -10,8 +12,8 @@ export default function WishlistItem({ product }) {
   const { dispatchCart } = useCart();
 
   const moveToCart = () => {
-    dispatchWishlist({ type: 'REMOVE_FROM_WISHLIST', payload: product });
-    dispatchCart({ type: 'ADD_TO_CART', payload: product });
+    removeFromWishlistAPI(dispatchWishlist, product);
+    addToCartAPI(dispatchCart, product);
   };
 
   const finalPrice = discount ? price - (price * discount) / 100 : price;
@@ -22,7 +24,7 @@ export default function WishlistItem({ product }) {
 
       <button
         className="btn fab small-fab btn-secondary wishlist-action"
-        onClick={() => dispatchWishlist({ type: 'REMOVE_FROM_WISHLIST', payload: product })}>
+        onClick={() => removeFromWishlistAPI(dispatchWishlist, product)}>
         <i className="fas fa-heart"></i>
       </button>
       <div className="card-content flex-1">
