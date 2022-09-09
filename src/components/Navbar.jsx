@@ -1,24 +1,26 @@
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 
-import { useCart } from '../contexts/cart-context';
 import { useWishlist } from '../contexts/wishlist-context';
 import { useAuth } from '../contexts/auth-context';
 
-import { getCartAPI } from '../utils/cart-utils';
 import { getWishlistAPI } from '../utils/wishlist-utils';
+import { getCart } from '../features/cartSlice';
 
 export default function Navbar() {
   const {
     authState: { isAuthenticated },
     logout,
   } = useAuth();
-  const { cartSummary, dispatchCart } = useCart();
   const { wishlist, dispatchWishlist } = useWishlist();
+
+  const { cartSummary } = useSelector((store) => store.cartState);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (isAuthenticated) {
-      getCartAPI(dispatchCart);
+      dispatch(getCart());
       getWishlistAPI(dispatchWishlist);
     }
   }, []);

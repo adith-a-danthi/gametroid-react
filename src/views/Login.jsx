@@ -1,12 +1,12 @@
 import axios from 'axios';
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 
 import { useAuth } from '../contexts/auth-context';
-import { useCart } from '../contexts/cart-context';
 import { useWishlist } from '../contexts/wishlist-context';
+import { getCart } from '../features/cartSlice';
 
-import { getCartAPI } from '../utils/cart-utils';
 import { getWishlistAPI } from '../utils/wishlist-utils';
 
 export default function Login() {
@@ -14,9 +14,9 @@ export default function Login() {
   const [form, setFormData] = useState({ email: '', password: '' });
   const [showPassword, setShowPassword] = useState(false);
   const { login } = useAuth();
-  const { dispatchCart } = useCart();
   const { dispatchWishlist } = useWishlist();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const { email, password } = form;
 
@@ -37,7 +37,7 @@ export default function Login() {
       const { encodedToken, foundUser } = response.data;
       login({ token: encodedToken, user: foundUser });
 
-      getCartAPI(dispatchCart);
+      dispatch(getCart());
       getWishlistAPI(dispatchWishlist);
 
       navigate('/products', { replace: true });

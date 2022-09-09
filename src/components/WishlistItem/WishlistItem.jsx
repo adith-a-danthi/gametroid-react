@@ -1,19 +1,19 @@
-import { useCart } from '../../contexts/cart-context';
-import { useWishlist } from '../../contexts/wishlist-context';
-import { addToCartAPI } from '../../utils/cart-utils';
-import { removeFromWishlistAPI } from '../../utils/wishlist-utils';
-
 import './WishlistItem.css';
+
+import { useDispatch } from 'react-redux';
+import { useWishlist } from '../../contexts/wishlist-context';
+import { addToCart } from '../../features/cartSlice';
+import { removeFromWishlistAPI } from '../../utils/wishlist-utils';
 
 export default function WishlistItem({ product }) {
   const { title, price, imageURL, discount } = product;
 
   const { dispatchWishlist } = useWishlist();
-  const { dispatchCart } = useCart();
+  const dispatch = useDispatch();
 
   const moveToCart = () => {
     removeFromWishlistAPI(dispatchWishlist, product);
-    addToCartAPI(dispatchCart, product);
+    dispatch(addToCart(product));
   };
 
   const finalPrice = discount ? price - (price * discount) / 100 : price;
