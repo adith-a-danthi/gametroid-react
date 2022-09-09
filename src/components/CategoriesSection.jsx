@@ -1,7 +1,14 @@
-import { useProducts } from '../contexts/product-context';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { getCategories } from '../features/productsSlice';
 
 export default function CategoriesSection() {
-  const { categories } = useProducts();
+  const { categories } = useSelector((store) => store.productsState);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getCategories());
+  }, []);
 
   return (
     <div className="grid grid-cols-3 fluid-grid gap-1">
