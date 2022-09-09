@@ -1,12 +1,10 @@
 import './CartItem.css';
 
 import { useDispatch } from 'react-redux';
-import { useWishlist } from '../../contexts/wishlist-context';
 import { removeFromCart, updateQuantity } from '../../features/cartSlice';
-import { addToWishlistAPI } from '../../utils/wishlist-utils';
+import { addToWishlist } from '../../features/wishlistSlice';
 
 export default function CartItem({ product }) {
-  const { dispatchWishlist } = useWishlist();
   const dispatch = useDispatch();
 
   const { title, price, imageURL, discount, qty } = product;
@@ -14,7 +12,7 @@ export default function CartItem({ product }) {
 
   const moveToWishlist = () => {
     dispatch(removeFromCart(product));
-    addToWishlistAPI(dispatchWishlist, product);
+    dispatch(addToWishlist(product));
   };
 
   const decreseQuantity = () => {

@@ -1,10 +1,10 @@
+import { useSelector } from 'react-redux';
 import { Navbar, WishlistItem } from '../../components';
-import { useWishlist } from '../../contexts/wishlist-context';
 
 import './Wishlist.css';
 
 export function Wishlist() {
-  const { wishlist } = useWishlist();
+  const { wishlist } = useSelector((store) => store.wishlistState);
 
   return (
     <div className="">

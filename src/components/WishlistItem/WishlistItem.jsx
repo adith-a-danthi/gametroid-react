@@ -1,18 +1,16 @@
 import './WishlistItem.css';
 
 import { useDispatch } from 'react-redux';
-import { useWishlist } from '../../contexts/wishlist-context';
 import { addToCart } from '../../features/cartSlice';
-import { removeFromWishlistAPI } from '../../utils/wishlist-utils';
+import { removeFromWishlist } from '../../features/wishlistSlice';
 
 export default function WishlistItem({ product }) {
   const { title, price, imageURL, discount } = product;
 
-  const { dispatchWishlist } = useWishlist();
   const dispatch = useDispatch();
 
   const moveToCart = () => {
-    removeFromWishlistAPI(dispatchWishlist, product);
+    dispatch(removeFromWishlist(product));
     dispatch(addToCart(product));
   };
 
@@ -24,7 +22,7 @@ export default function WishlistItem({ product }) {
 
       <button
         className="btn fab small-fab btn-secondary wishlist-action"
-        onClick={() => removeFromWishlistAPI(dispatchWishlist, product)}>
+        onClick={() => dispatch(removeFromWishlist(product))}>
         <i className="fas fa-heart"></i>
       </button>
       <div className="card-content flex-1">

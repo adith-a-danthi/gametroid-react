@@ -2,21 +2,21 @@ import './ProductCard.css';
 
 import { useNavigate } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
-import { useWishlist } from '../../contexts/wishlist-context';
+
 import { useAuth } from '../../contexts/auth-context';
 import { addToCart } from '../../features/cartSlice';
-import { addToWishlistAPI, removeFromWishlistAPI } from '../../utils/wishlist-utils';
+import { addToWishlist, removeFromWishlist } from '../../features/wishlistSlice';
 
 export default function ProductCard({ product }) {
   const { title, price, imageURL, discount, rating } = product;
   const finalPrice = discount ? price - (price * discount) / 100 : price;
 
   // Hooks
-  const { wishlist, dispatchWishlist } = useWishlist();
   const { authState } = useAuth();
   const navigate = useNavigate();
 
   const { cart } = useSelector((store) => store.cartState);
+  const { wishlist } = useSelector((store) => store.wishlistState);
   const dispatch = useDispatch();
 
   const isWishlisted = wishlist.some((item) => item._id === product._id);
@@ -34,11 +34,9 @@ export default function ProductCard({ product }) {
     }
   };
 
-  const addToWishlist = () => {
+  const addProductToWishlist = () => {
     if (authState.isAuthenticated) {
-      isWishlisted
-        ? removeFromWishlistAPI(dispatchWishlist, product)
-        : addToWishlistAPI(dispatchWishlist, product);
+      isWishlisted ? dispatch(removeFromWishlist(product)) : dispatch(addToWishlist(product));
     } else {
       navigate('/login');
     }
@@ -71,7 +69,7 @@ export default function ProductCard({ product }) {
             <span className="fas fa-shopping-cart mr-2"></span>
             Add to Cart
           </button>
-          <button className="btn outlined" onClick={() => addToWishlist()}>
+          <button className="btn outlined" onClick={() => addProductToWishlist()}>
             <span className={isWishlisted ? 'fas fa-heart' : 'far fa-heart'}></span>
           </button>
         </div>

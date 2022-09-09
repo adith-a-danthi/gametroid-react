@@ -4,17 +4,14 @@ import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 
 import { useAuth } from '../contexts/auth-context';
-import { useWishlist } from '../contexts/wishlist-context';
 import { getCart } from '../features/cartSlice';
-
-import { getWishlistAPI } from '../utils/wishlist-utils';
+import { getWishlist } from '../features/wishlistSlice';
 
 export default function Login() {
   // Hooks
   const [form, setFormData] = useState({ email: '', password: '' });
   const [showPassword, setShowPassword] = useState(false);
   const { login } = useAuth();
-  const { dispatchWishlist } = useWishlist();
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -38,7 +35,7 @@ export default function Login() {
       login({ token: encodedToken, user: foundUser });
 
       dispatch(getCart());
-      getWishlistAPI(dispatchWishlist);
+      dispatch(getWishlist());
 
       navigate('/products', { replace: true });
     } catch (error) {
