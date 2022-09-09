@@ -4,7 +4,6 @@ import './styles/_reset.css';
 import App from './App';
 import { makeServer } from './server';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { ProductProvider } from './contexts/product-context';
 import { CartProvider } from './contexts/cart-context';
 import { WishlistProvider } from './contexts/wishlist-context';
 import { AuthProvider } from './contexts/auth-context';
@@ -18,15 +17,13 @@ ReactDOM.render(
   <React.StrictMode>
     <Router>
       <Provider store={store}>
-        <ProductProvider>
-          <AuthProvider>
-            <CartProvider>
-              <WishlistProvider>
-                <App />
-              </WishlistProvider>
-            </CartProvider>
-          </AuthProvider>
-        </ProductProvider>
+        <AuthProvider>
+          <CartProvider>
+            <WishlistProvider>
+              <App />
+            </WishlistProvider>
+          </CartProvider>
+        </AuthProvider>
       </Provider>
     </Router>
   </React.StrictMode>,
