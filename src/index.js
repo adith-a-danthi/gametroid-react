@@ -4,7 +4,6 @@ import './styles/_reset.css';
 import App from './App';
 import { makeServer } from './server';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { CartProvider } from './contexts/cart-context';
 import { WishlistProvider } from './contexts/wishlist-context';
 import { AuthProvider } from './contexts/auth-context';
 import { Provider } from 'react-redux';
@@ -18,11 +17,9 @@ ReactDOM.render(
     <Router>
       <Provider store={store}>
         <AuthProvider>
-          <CartProvider>
-            <WishlistProvider>
-              <App />
-            </WishlistProvider>
-          </CartProvider>
+          <WishlistProvider>
+            <App />
+          </WishlistProvider>
         </AuthProvider>
       </Provider>
     </Router>
