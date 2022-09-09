@@ -1,20 +1,39 @@
-import { useProducts } from '../../contexts/product-context';
 import './Sidebar.css';
 
+import { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import {
+  addCategory,
+  clearFilters,
+  highToLow,
+  lowToHigh,
+  removeCategory,
+  updatePriceRange,
+  updateRating,
+} from '../../features/filterSlice.js';
+import { getCategories } from '../../features/productsSlice';
+
 export default function Sidebar() {
-  const { categories: categoriesState, filtersState, filtersDispatch } = useProducts();
-  const { categories, sortBy, rating, priceRange } = filtersState;
+  const { categories: categoriesState } = useSelector((store) => store.productsState);
+
+  const { categories, sortBy, rating, priceRange } = useSelector((store) => store.filterState);
+  const dispatch = useDispatch();
 
   const categoryClickHandler = (category) => {
-    const type = categories.includes(category) ? 'REMOVE_CATEGORY' : 'ADD_CATEGORY';
-    filtersDispatch({ type, payload: category });
+    categories.includes(category)
+      ? dispatch(removeCategory(category))
+      : dispatch(addCategory(category));
   };
+
+  useEffect(() => {
+    dispatch(getCategories());
+  }, []);
 
   return (
     <aside className="sidebar">
       <div className="flex justify-space-between">
         <h4 className="heading-4">Filters</h4>
-        <button className="btn link" onClick={() => filtersDispatch({ type: 'CLEAR_FILTERS' })}>
+        <button className="btn link" onClick={() => dispatch(clearFilters())}>
           Clear
         </button>
       </div>
@@ -32,7 +51,7 @@ export default function Sidebar() {
             value={priceRange}
             list="tickmarks"
             className="slider"
-            onChange={(e) => filtersDispatch({ type: 'PRICE_RANGE', payload: e.target.value })}
+            onChange={(e) => dispatch(updatePriceRange(e.target.value))}
           />
           <datalist id="tickmarks" className="flex justify-space-between text-sm">
             <option value="0" className="font-weight-bold" label="0"></option>
@@ -78,7 +97,7 @@ export default function Sidebar() {
               id="price-low"
               name="sortBy"
               checked={sortBy === 'LOW_TO_HIGH'}
-              onChange={() => filtersDispatch({ type: 'LOW_TO_HIGH', payload: 'LOW_TO_HIGH' })}
+              onChange={() => dispatch(lowToHigh())}
             />
             <label className="text-base ml-2" htmlFor="price-low">
               Price (Low to High)
@@ -91,7 +110,7 @@ export default function Sidebar() {
               id="price-high"
               name="sortBy"
               checked={sortBy === 'HIGH_TO_LOW'}
-              onChange={() => filtersDispatch({ type: 'HIGH_TO_LOW', payload: 'HIGH_TO_LOW' })}
+              onChange={() => dispatch(highToLow())}
             />
             <label className="text-base ml-2" htmlFor="price-high">
               Price (High to Low)
@@ -111,7 +130,7 @@ export default function Sidebar() {
               id="4stars"
               name="ratings"
               checked={rating === 4}
-              onChange={() => filtersDispatch({ type: 'RATING', payload: 4 })}
+              onChange={() => dispatch(updateRating(4))}
             />
             <label className="text-base ml-2" htmlFor="4stars">
               4 Stars & Above
@@ -124,7 +143,7 @@ export default function Sidebar() {
               id="3stars"
               name="ratings"
               checked={rating === 3}
-              onChange={() => filtersDispatch({ type: 'RATING', payload: 3 })}
+              onChange={() => dispatch(updateRating(3))}
             />
             <label className="text-base ml-2" htmlFor="3stars">
               3 Stars & Above
@@ -137,7 +156,7 @@ export default function Sidebar() {
               id="2stars"
               name="ratings"
               checked={rating === 2}
-              onChange={() => filtersDispatch({ type: 'RATING', payload: 2 })}
+              onChange={() => dispatch(updateRating(2))}
             />
             <label className="text-base ml-2" htmlFor="2stars">
               2 Stars & Above
@@ -150,7 +169,7 @@ export default function Sidebar() {
               id="1star"
               name="ratings"
               checked={rating === 1}
-              onChange={() => filtersDispatch({ type: 'RATING', payload: 1 })}
+              onChange={() => dispatch(updateRating(1))}
             />
             <label className="text-base ml-2" htmlFor="1star">
               1 Star & Above
