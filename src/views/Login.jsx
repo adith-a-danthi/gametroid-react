@@ -1,9 +1,8 @@
-import axios from 'axios';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 
-import { useAuth } from '../contexts/auth-context';
+import { login } from '../features/authSlice';
 import { getCart } from '../features/cartSlice';
 import { getWishlist } from '../features/wishlistSlice';
 
@@ -11,7 +10,6 @@ export default function Login() {
   // Hooks
   const [form, setFormData] = useState({ email: '', password: '' });
   const [showPassword, setShowPassword] = useState(false);
-  const { login } = useAuth();
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -26,13 +24,7 @@ export default function Login() {
   const loginHandler = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('/api/auth/login', {
-        email,
-        password,
-      });
-
-      const { encodedToken, foundUser } = response.data;
-      login({ token: encodedToken, user: foundUser });
+      await dispatch(login({ email, password })).unwrap();
 
       dispatch(getCart());
       dispatch(getWishlist());

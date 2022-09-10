@@ -3,7 +3,6 @@ import './ProductCard.css';
 import { useNavigate } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { useAuth } from '../../contexts/auth-context';
 import { addToCart } from '../../features/cartSlice';
 import { addToWishlist, removeFromWishlist } from '../../features/wishlistSlice';
 
@@ -12,9 +11,9 @@ export default function ProductCard({ product }) {
   const finalPrice = discount ? price - (price * discount) / 100 : price;
 
   // Hooks
-  const { authState } = useAuth();
   const navigate = useNavigate();
 
+  const { isAuthenticated } = useSelector((state) => state.authState);
   const { cart } = useSelector((store) => store.cartState);
   const { wishlist } = useSelector((store) => store.wishlistState);
   const dispatch = useDispatch();
@@ -22,7 +21,7 @@ export default function ProductCard({ product }) {
   const isWishlisted = wishlist.some((item) => item._id === product._id);
 
   const addProductToCart = async () => {
-    if (authState.isAuthenticated) {
+    if (isAuthenticated) {
       const itemInCart = cart.find((item) => item._id === product._id);
       if (itemInCart) {
         navigate('/cart');
@@ -35,7 +34,7 @@ export default function ProductCard({ product }) {
   };
 
   const addProductToWishlist = () => {
-    if (authState.isAuthenticated) {
+    if (isAuthenticated) {
       isWishlisted ? dispatch(removeFromWishlist(product)) : dispatch(addToWishlist(product));
     } else {
       navigate('/login');
