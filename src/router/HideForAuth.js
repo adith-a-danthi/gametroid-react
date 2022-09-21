@@ -1,8 +1,8 @@
-import { useAuth } from '../contexts/auth-context';
 import { Navigate, Outlet } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 export const HideForAuth = () => {
-  const { authState } = useAuth();
+  const { isAuthenticated } = useSelector((state) => state.authState);
 
-  return authState.isAuthenticated ? <Navigate to="/products" replace /> : <Outlet />;
+  return isAuthenticated ? <Navigate to="/products" replace /> : <Outlet />;
 };

@@ -1,27 +1,29 @@
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 
-import { useCart } from '../contexts/cart-context';
-import { useWishlist } from '../contexts/wishlist-context';
-import { useAuth } from '../contexts/auth-context';
-
-import { getCartAPI } from '../utils/cart-utils';
-import { getWishlistAPI } from '../utils/wishlist-utils';
+import { getCart } from '../features/cartSlice';
+import { getWishlist } from '../features/wishlistSlice';
+import { logout } from '../features/authSlice';
+import { clearLocalStorage } from '../utils/auth-utils';
 
 export default function Navbar() {
-  const {
-    authState: { isAuthenticated },
-    logout,
-  } = useAuth();
-  const { cartSummary, dispatchCart } = useCart();
-  const { wishlist, dispatchWishlist } = useWishlist();
+  const { isAuthenticated } = useSelector((state) => state.authState);
+  const { cartSummary } = useSelector((store) => store.cartState);
+  const { wishlist } = useSelector((store) => store.wishlistState);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (isAuthenticated) {
-      getCartAPI(dispatchCart);
-      getWishlistAPI(dispatchWishlist);
+      dispatch(getCart());
+      dispatch(getWishlist());
     }
   }, []);
+
+  const logoutHandler = () => {
+    dispatch(logout());
+    clearLocalStorage();
+  };
 
   return (
     <header>
@@ -66,7 +68,7 @@ export default function Navbar() {
             <Link
               to="/login"
               onClick={() => {
-                isAuthenticated && logout();
+                isAuthenticated && logoutHandler();
               }}>
               <button className="btn link">{isAuthenticated ? 'Logout' : 'Login'}</button>
             </Link>

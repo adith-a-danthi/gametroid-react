@@ -1,19 +1,17 @@
-import { useCart } from '../../contexts/cart-context';
-import { useWishlist } from '../../contexts/wishlist-context';
-import { addToCartAPI } from '../../utils/cart-utils';
-import { removeFromWishlistAPI } from '../../utils/wishlist-utils';
-
 import './WishlistItem.css';
+
+import { useDispatch } from 'react-redux';
+import { addToCart } from '../../features/cartSlice';
+import { removeFromWishlist } from '../../features/wishlistSlice';
 
 export default function WishlistItem({ product }) {
   const { title, price, imageURL, discount } = product;
 
-  const { dispatchWishlist } = useWishlist();
-  const { dispatchCart } = useCart();
+  const dispatch = useDispatch();
 
   const moveToCart = () => {
-    removeFromWishlistAPI(dispatchWishlist, product);
-    addToCartAPI(dispatchCart, product);
+    dispatch(removeFromWishlist(product));
+    dispatch(addToCart(product));
   };
 
   const finalPrice = discount ? price - (price * discount) / 100 : price;
@@ -24,7 +22,7 @@ export default function WishlistItem({ product }) {
 
       <button
         className="btn fab small-fab btn-secondary wishlist-action"
-        onClick={() => removeFromWishlistAPI(dispatchWishlist, product)}>
+        onClick={() => dispatch(removeFromWishlist(product))}>
         <i className="fas fa-heart"></i>
       </button>
       <div className="card-content flex-1">

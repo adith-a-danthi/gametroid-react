@@ -1,10 +1,21 @@
 import { Route, Routes } from 'react-router';
 import { Home, Products, Cart, Wishlist, Login, Register, Page404 } from './views';
 import { HideForAuth, RequiresAuth } from './router';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { loadUserFromLocalStorage } from './utils/auth-utils';
+import { loadUser } from './features/authSlice';
 
 import './styles/base.css';
 
 function App() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const user = loadUserFromLocalStorage();
+    user && dispatch(loadUser(user));
+  }, []);
+
   return (
     <div className="App">
       <Routes>

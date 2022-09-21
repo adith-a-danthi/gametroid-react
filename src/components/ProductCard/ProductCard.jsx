@@ -1,41 +1,41 @@
-import { useNavigate } from 'react-router';
-import { useCart } from '../../contexts/cart-context';
-import { useWishlist } from '../../contexts/wishlist-context';
-import { useAuth } from '../../contexts/auth-context';
-import { addToCartAPI } from '../../utils/cart-utils';
-import { addToWishlistAPI, removeFromWishlistAPI } from '../../utils/wishlist-utils';
 import './ProductCard.css';
+
+import { useNavigate } from 'react-router';
+import { useDispatch, useSelector } from 'react-redux';
+
+import { addToCart } from '../../features/cartSlice';
+import { addToWishlist, removeFromWishlist } from '../../features/wishlistSlice';
 
 export default function ProductCard({ product }) {
   const { title, price, imageURL, discount, rating } = product;
   const finalPrice = discount ? price - (price * discount) / 100 : price;
 
   // Hooks
-  const { cart, dispatchCart } = useCart();
-  const { wishlist, dispatchWishlist } = useWishlist();
-  const { authState } = useAuth();
   const navigate = useNavigate();
+
+  const { isAuthenticated } = useSelector((state) => state.authState);
+  const { cart } = useSelector((store) => store.cartState);
+  const { wishlist } = useSelector((store) => store.wishlistState);
+  const dispatch = useDispatch();
 
   const isWishlisted = wishlist.some((item) => item._id === product._id);
 
-  const addToCart = async () => {
-    if (authState.isAuthenticated) {
+  const addProductToCart = async () => {
+    if (isAuthenticated) {
       const itemInCart = cart.find((item) => item._id === product._id);
       if (itemInCart) {
         navigate('/cart');
       } else {
-        addToCartAPI(dispatchCart, product);
+        dispatch(addToCart(product));
       }
     } else {
       navigate('/login');
     }
   };
 
-  const addToWishlist = () => {
-    if (authState.isAuthenticated) {
-      isWishlisted
-        ? removeFromWishlistAPI(dispatchWishlist, product)
-        : addToWishlistAPI(dispatchWishlist, product);
+  const addProductToWishlist = () => {
+    if (isAuthenticated) {
+      isWishlisted ? dispatch(removeFromWishlist(product)) : dispatch(addToWishlist(product));
     } else {
       navigate('/login');
     }
@@ -64,11 +64,11 @@ export default function ProductCard({ product }) {
         </div>
         {/* Action Buttons */}
         <div className="card-actions">
-          <button className="btn flex-1" onClick={() => addToCart()}>
+          <button className="btn flex-1" onClick={() => addProductToCart()}>
             <span className="fas fa-shopping-cart mr-2"></span>
             Add to Cart
           </button>
-          <button className="btn outlined" onClick={() => addToWishlist()}>
+          <button className="btn outlined" onClick={() => addProductToWishlist()}>
             <span className={isWishlisted ? 'fas fa-heart' : 'far fa-heart'}></span>
           </button>
         </div>

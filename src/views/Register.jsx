@@ -1,14 +1,14 @@
-import axios from 'axios';
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../contexts/auth-context';
+import { signUp } from '../features/authSlice';
 
 export default function Register() {
   // Hooks
   const [form, setFormData] = useState({ name: '', email: '', password: '' });
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const dispatch = useDispatch();
 
   const { name, email, password } = form;
   // Handlers
@@ -19,16 +19,8 @@ export default function Register() {
 
   const signUpHandler = async (e) => {
     e.preventDefault();
-
     try {
-      const response = await axios.post('/api/auth/signup', {
-        name,
-        email,
-        password,
-      });
-
-      const { encodedToken, createdUser } = response.data;
-      login({ token: encodedToken, user: createdUser });
+      await dispatch(signUp({ name, email, password })).unwrap();
 
       navigate('/products', { replace: true });
     } catch (error) {

@@ -1,10 +1,12 @@
-import { Navbar, CartItem, CartSummary } from '../../components';
-import { useCart } from '../../contexts/cart-context';
-import { clearCartAPI } from '../../utils/cart-utils';
 import './Cart.css';
+import { Navbar, CartItem, CartSummary } from '../../components';
+
+import { useDispatch, useSelector } from 'react-redux';
+import { clearCart } from '../../features/cartSlice';
 
 export function Cart() {
-  const { cart, dispatchCart } = useCart();
+  const { cart } = useSelector((store) => store.cartState);
+  const dispatch = useDispatch();
 
   return (
     <>
@@ -14,7 +16,7 @@ export function Cart() {
         <div className="cart-items">
           <div className="flex justify-space-between align-items-end">
             <h3 className="heading-3 mr-2">Cart</h3>
-            <button className="btn link" onClick={() => clearCartAPI(dispatchCart)}>
+            <button className="btn link" onClick={() => dispatch(clearCart())}>
               Clear Cart
             </button>
           </div>

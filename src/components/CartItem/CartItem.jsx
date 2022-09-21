@@ -1,25 +1,24 @@
-import { useCart } from '../../contexts/cart-context';
-import { useWishlist } from '../../contexts/wishlist-context';
-import { removeFromCartAPI, updateQuantityAPI } from '../../utils/cart-utils';
-import { addToWishlistAPI } from '../../utils/wishlist-utils';
 import './CartItem.css';
 
+import { useDispatch } from 'react-redux';
+import { removeFromCart, updateQuantity } from '../../features/cartSlice';
+import { addToWishlist } from '../../features/wishlistSlice';
+
 export default function CartItem({ product }) {
-  const { dispatchCart } = useCart();
-  const { dispatchWishlist } = useWishlist();
+  const dispatch = useDispatch();
 
   const { title, price, imageURL, discount, qty } = product;
   const finalPrice = discount ? price - (price * discount) / 100 : price;
 
   const moveToWishlist = () => {
-    removeFromCartAPI(dispatchCart, product);
-    addToWishlistAPI(dispatchWishlist, product);
+    dispatch(removeFromCart(product));
+    dispatch(addToWishlist(product));
   };
 
   const decreseQuantity = () => {
     product.qty === 1
-      ? removeFromCartAPI(dispatchCart, product)
-      : updateQuantityAPI(dispatchCart, product, 'decrement');
+      ? dispatch(removeFromCart(product))
+      : dispatch(updateQuantity({ product, type: 'decrement' }));
   };
 
   return (
@@ -49,16 +48,14 @@ export default function CartItem({ product }) {
           <p className="quantity">{qty}</p>
           <button
             className="btn"
-            onClick={() => updateQuantityAPI(dispatchCart, product, 'increment')}>
+            onClick={() => dispatch(updateQuantity({ product, type: 'increment' }))}>
             <span className="fas fa-plus"></span>
           </button>
         </div>
 
         {/* Action Buttons */}
         <div className="grid grid-cols-2 fluid-grid">
-          <button
-            className="btn outlined my-2"
-            onClick={() => removeFromCartAPI(dispatchCart, product)}>
+          <button className="btn outlined my-2" onClick={() => dispatch(removeFromCart(product))}>
             Remove from cart
           </button>
           <button className="btn outlined my-2" onClick={moveToWishlist}>
